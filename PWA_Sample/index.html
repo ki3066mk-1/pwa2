@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.json">
+    <title>Hello PWA</title>
+    <script src="weather.js"></script>
+  </head>
+
+<body>
+  <main>
+    <h1>Hello PWA</h1>
+    <select onchange="weather.onchange(this.options[this.selectedIndex].value)">
+      <option value="Osaka">大阪</option>
+      <option value="Tokyo">東京</option>
+      <option value="Kobe">神戸</option>
+      <option value="Okinawa">沖縄</option>
+      <option value="Sapporo">札幌</option>
+    </select>
+    <div id="weather_disp" />
+  </main>
+  <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCPbU9SB0ZOaQFX-DQ57-V1VUfitpHC7R8",
+      authDomain: "pwatest-c9855.firebaseapp.com",
+      databaseURL: "https://pwatest-c9855.firebaseio.com",
+      projectId: "pwatest-c9855",
+      storageBucket: "pwatest-c9855.appspot.com",
+      messagingSenderId: "632954428917"
+    };
+    firebase.initializeApp(config);
+    var messaging = firebase.messaging();
+    var serviceWorker = navigator.serviceWorker;
+
+    messaging.requestPermission();
+
+    serviceWorker.register('sw.js').then(() => {
+      return serviceWorker.ready;
+    }).then(regist => {
+      messaging.useServiceWorker(regist);
+      messaging.requestPermission().then(() => {
+        messaging.getToken().then(token => {
+          console.log(token);
+
+          var xhr = new XMLHttpRequest();
+          var baseURL = 'https://iid.googleapis.com/iid/v1/'
+          var topic = 'test'
+          xhr.open('POST', baseURL + token + '/rel/topics/' + topic);
+          xhr.setRequestHeader('content-type', 'application/json');
+          xhr.setRequestHeader('authorization', 'key=AAAAk18GHfU:APA91bGX-DkNzPXaRqdPsa1ZTFwrWkJ7TP1A7gc63q_lFKd4BV9nuvNhxN9GfCtYSsLaC6073psdcpU2e2IkjqJGNmhzLZOpVg2WlTU5iV-WQ7dIn6l73cZxMoapYAhCHSthfdQ8KhkC')
+          xhr.send();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
