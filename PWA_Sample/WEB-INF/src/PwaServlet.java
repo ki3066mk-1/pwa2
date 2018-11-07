@@ -14,6 +14,45 @@ public class PwaServlet extends HttpServlet {
 		System.out.println("doPost");
 		res.setContentType("application/json");
 	    res.setCharacterEncoding("utf-8");
-	    res.getWriter().println("{ \"speech\": \"hello\", \"displayText\": \"hello!\"}");
+
+
+	    StringBuffer p_buff = new StringBuffer();
+	    p_buff.append("{\r\n");
+	    p_buff.append("\"conversationToken\": \"[]\",\r\n");
+	    p_buff.append("\"expectUserResponse\": true,\r\n");
+	    p_buff.append("\"expectedInputs\": [\r\n");
+	    p_buff.append("{\r\n");
+	    p_buff.append("\"inputPrompt\": {\r\n");
+	    p_buff.append("\"richInitialPrompt\": {\r\n");
+	    p_buff.append("\"items\": [\r\n");
+	    p_buff.append("{\r\n");
+	    p_buff.append("\"simpleResponse\": {\r\n");
+	    p_buff.append("\"textToSpeech\": \"電話番号が知りたい場合は、「電話番号を教えて」と言ってください。\"\r\n");
+	    p_buff.append("}\r\n");
+	    p_buff.append("}\r\n");
+	    p_buff.append("]\r\n");
+	    p_buff.append("}\r\n");
+	    p_buff.append("},\r\n");
+	    p_buff.append("\"possibleIntents\": [\r\n");
+	    p_buff.append("{\r\n");
+	    p_buff.append("\"intent\": \"assistant.intent.action.TEXT\"\r\n");
+	    p_buff.append("}\r\n");
+	    p_buff.append("],\r\n");
+	    p_buff.append("\"speechBiasingHints\": [\r\n");
+	    p_buff.append("\"$TelList\"\r\n");
+	    p_buff.append("]\r\n");
+	    p_buff.append("}\r\n");
+	    p_buff.append("],\r\n");
+	    p_buff.append("\"responseMetadata\": {\r\n");
+	    p_buff.append("\"status\": {\r\n");
+	    p_buff.append("\"message\": \"Success (200)\"\r\n");
+	    p_buff.append("},\r\n");
+	    p_buff.append("\"queryMatchInfo\": {\r\n");
+	    p_buff.append("\"queryMatched\": true,\r\n");
+	    p_buff.append("\"intent\": \"ab3f7595-ad71-49e4-a87b-96835237af2a\"\r\n");
+	    p_buff.append("}\r\n");
+	    p_buff.append("}\r\n");
+	    p_buff.append("}\r\n");
+	    res.getWriter().println(p_buff.toString());
 	}
 }
