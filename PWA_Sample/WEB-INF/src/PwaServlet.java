@@ -5,16 +5,35 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 public class PwaServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		System.out.println("doGet");
 	}
+
+	class Info {
+	    public String fulfillmentText;
+	}
+
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		System.out.println("doPost");
 		res.setContentType("application/json");
 	    res.setCharacterEncoding("utf-8");
 
+        Info info = new Info();
+        info.fulfillmentText = "Taro Tanaka";
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        try {
+            String script = mapper.writeValueAsString(info);
+            res.getWriter().println(script);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 	    StringBuffer p_buff = new StringBuffer();
 //	    p_buff.append("{\r\n");
@@ -53,7 +72,7 @@ public class PwaServlet extends HttpServlet {
 //	    p_buff.append("}\r\n");
 //	    p_buff.append("}\r\n");
 //	    p_buff.append("}\r\n");
-	    p_buff.append("{\"fulfillmentText\": \"string\"}");
-	    res.getWriter().println(p_buff.toString());
+//	    p_buff.append("{\"fulfillmentText\": \"string\"}");
+//	    res.getWriter().println(p_buff.toString());
 	}
 }
