@@ -1,9 +1,14 @@
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class PwaServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -11,14 +16,62 @@ public class PwaServlet extends HttpServlet {
 	}
 
 	class Info {
-	    public String fulfillmentText;
+	    public PayLoad payload;
 	}
+	class PayLoad {
+		public Google google;
+	}
+	class Google {
+		public boolean expectUserResponse;
+		public RichResponse richResponse;
+	}
+	class RichResponse {
+		public List items;
+	}
+	class Item {
+		public SimpleResponse simpleResponse;
+	}
+	class SimpleResponse {
+		public String textToSpeech;
+	}
+
+
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		System.out.println("doPost");
 		res.setContentType("application/json");
 	    res.setCharacterEncoding("utf-8");
+
+	    SimpleResponse sr = new SimpleResponse();
+	    sr.textToSpeech = "this is a simple response";
+
+	    Item item = new Item();
+	    item.simpleResponse = sr;
+
+	    RichResponse rr = new RichResponse();
+	    rr.items = new ArrayList();
+	    rr.items.add(item);
+
+	    Google google = new Google();
+	    google.expectUserResponse = true;
+	    google.richResponse = rr;
+
+	    PayLoad payload = new PayLoad();
+	    payload.google = google;
+
+	    Info info = new Info();
+	    info.payload = payload;
+
+	    ObjectMapper mapper = new ObjectMapper();
+	    mapper.enable(SerializationFeature.INDENT_OUTPUT);
+	    try {
+          String script = mapper.writeValueAsString(info);
+          res.getWriter().println(script);
+          System.out.println(script);
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }
 
 //        Info info = new Info();
 //        info.fulfillmentText = "Taro Tanaka";
@@ -89,6 +142,6 @@ public class PwaServlet extends HttpServlet {
 //	    p_buff.append("}\r\n");
 //	    p_buff.append("{\"fulfillmentText\": \"string\"}");
 
-	    res.getWriter().println(p_buff.toString());
+//	    res.getWriter().println(p_buff.toString());
 	}
 }
