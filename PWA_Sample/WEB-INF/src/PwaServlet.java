@@ -14,6 +14,6 @@ public class PwaServlet extends HttpServlet {
 		System.out.println("doPost");
 		res.setContentType("application/json");
 	    res.setCharacterEncoding("utf-8");
-	    res.getWriter().println("{ 'speak': 'hello'}");
+	    res.getWriter().println("{ 'speech': 'hello', 'displayText': 'hello!'}");
 	}
 }
